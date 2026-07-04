@@ -1,7 +1,8 @@
 // press submit, get form values
 // log values in array // make a card
 
-const myLibrary = [];
+let myLibrary = [];
+
 const container = document.querySelector(".container");
 const submit = document.querySelector("#submit");
 const form = document.querySelector('.form');
@@ -15,10 +16,18 @@ function Book(title, author, pages, read) {
 }
 
 function addBookToLibrary(title, author, pages, read) {
+    /*
+    const title = form.elements["title"].value;
+    const author = form.elements["author"].value;
+    const pages = form.elements["pages"].value;
+    */
+   
     const readCheck = form.elements['read'].checked;
+    
     const newBook = new Book(title, author, pages, readCheck);
     myLibrary.push(newBook);
     console.log(myLibrary);
+    return newBook;
 }
 /*
 function displayBooks() {
@@ -35,17 +44,27 @@ function getFormValues() {
 function completeLibrary() {
     const values = getFormValues();
     const readCheck = form.elements['read'].checked;
-    addBookToLibrary(values.title, values.author, values.pages, readCheck);
+    return addBookToLibrary(values.title, values.author, values.pages, readCheck);
     // displayBooks();
+}
+
+Book.prototype.changeReadStatus = function () {
+    if (this.read === "Read") {
+        this.read = "Not Read";
+        console.log(this);
+        console.log('Changed Book Status');
+    } else {
+        this.read = "Read";
+        console.log(this);
+        console.log('Changed Book Status');
+    }
 }
 
 submit.addEventListener('click', (e) => {
     e.preventDefault();
-    completeLibrary();
-
-    //let eachBook = myLibrary.forEach(item => {
+    // completeLibrary();
     
-    const values = getFormValues();
+    const values = completeLibrary();
 
     const createCard = document.createElement("div");
     createCard.classList.add("card")
@@ -66,11 +85,11 @@ submit.addEventListener('click', (e) => {
     const createRead = document.createElement("div")
     createRead.classList.add("read")
 
-    if (values.read === "on") {
+    if (values.read === true) {
         values.read = "Read";
     } 
-    if (values.read === undefined) {
-        values.read = "Not read";
+    if (values.read === false) {
+        values.read = "Not Read";
     }
 
     createRead.textContent = "Read: " + values.read;
@@ -87,10 +106,23 @@ submit.addEventListener('click', (e) => {
     createDelete.addEventListener('click', () => {
         console.log("Card Deleted");
         container.removeChild(createCard);
+
+        myLibrary = myLibrary.filter(item => item.id !== values.id);
+        console.log(myLibrary);
     })
 
+    const createReadStatus = document.createElement("button")
+    createReadStatus.textContent = "Change Book Status";
+    
+    createReadStatus.addEventListener('click', () => {
+        values.changeReadStatus();
+        createRead.textContent = "Read: " + values.read;
+    })
+
+    createCard.appendChild(createReadStatus);
+    
     container.appendChild(createCard);
 
     console.log(values);
-    // });
+
 });
