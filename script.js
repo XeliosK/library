@@ -7,12 +7,36 @@ const container = document.querySelector(".container");
 const submit = document.querySelector("#submit");
 const form = document.querySelector('.form');
 
+/* 
 function Book(title, author, pages, read) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.read = read;
     this.id = crypto.randomUUID();
+}
+*/
+
+class Book {
+    constructor(title,author,pages,read) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.read = read;
+        this.id = crypto.randomUUID();
+    }
+
+    changeReadStatus() {
+        if (this.read === "Read") {
+            this.read = "Not Read";
+            console.log(this);
+            console.log('Changed Book Status');
+        } else {
+            this.read = "Read";
+            console.log(this);
+            console.log('Changed Book Status');
+        }
+    }
 }
 
 function addBookToLibrary(title, author, pages, read) {
@@ -48,17 +72,7 @@ function completeLibrary() {
     // displayBooks();
 }
 
-Book.prototype.changeReadStatus = function () {
-    if (this.read === "Read") {
-        this.read = "Not Read";
-        console.log(this);
-        console.log('Changed Book Status');
-    } else {
-        this.read = "Read";
-        console.log(this);
-        console.log('Changed Book Status');
-    }
-}
+
 
 submit.addEventListener('click', (e) => {
     e.preventDefault();
